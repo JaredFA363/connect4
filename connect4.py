@@ -1,4 +1,9 @@
 import numpy as np 
+import pygame
+import sys
+
+BLUE = (0,0,255)
+BLACK = (0,0,0)
 
 ROWCOUNT=8
 COLOUMNCOUNT =8
@@ -42,6 +47,12 @@ def win(board,piece):
       if board[r][x] == piece and board[r-1][x+1] == piece and board[r-2][x+2] == piece and board[r-3][x+3] == piece:
         return True
 
+def draw_board(board):
+  for c in range(COLOUMNCOUNT):
+    for r in range(ROWCOUNT):
+      pygame.draw.rect(screen,BLUE,(c* SQUARESIZE, r * SQUARESIZE + SQUARESIZE, SQUARESIZE,SQUARESIZE))
+      pygame.draw.circle(screen,BLACK,(int(c * SQUARESIZE + SQUARESIZE/2), int(r *SQUARESIZE +SQUARESIZE+ SQUARESIZE/2)),RADIUS)
+
 
 board = create_board()
 print(board)
@@ -50,34 +61,52 @@ game_over = False     # checks if game is over
 
 turn = 0   # indicates whose players turn it is
 
+pygame.init()
+ 
+SQUARESIZE = 80     #100pixels for the screen size
+WIDTH = COLOUMNCOUNT * SQUARESIZE
+HEIGHT = (ROWCOUNT+1) * SQUARESIZE
+SIZE = (WIDTH,HEIGHT)
+RADIUS =int(SQUARESIZE/2 -5)
+screen = pygame.display.set_mode(SIZE)
+draw_board(board)
+pygame.display.update()
+
 while not game_over:
-    #ask for player 1 input
-    if turn == 0:
-        selection = int(input("player 1 make your selection between 0 and 7"))
-        print(selection)
-        if validation(board,selection):
-          row = next_open_row(board,selection)
-          piece(board,row,selection,1)
 
-          if win(board,1):
-            print("you win :)")
-            game_over = True
-          
-          
-    else:
-        selection = int(input("player 2 make your selection between 0 and 7"))
-        print(selection)
-        if validation(board,selection):
-          row = next_open_row(board,selection)
-          piece(board,row,selection,2)
-
-    
-          if win(board,2):
-            print("you win :)")
-            game_over = True
-            
-
-    print_board(board)    
-    turn +=1
-    turn = turn % 2 # alternates between 1 and 0 which changes the turns between players
+  for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+      sys.exit()
+      
+      if event.type == pygame.MOUSEBUTTONDOWN:
+        continue
+        #ask for player 1 input
+##          if turn == 0:
+##              selection = int(input("player 1 make your selection between 0 and 7"))
+##              print(selection)
+##              if validation(board,selection):
+##                row = next_open_row(board,selection)
+##                piece(board,row,selection,1)
+##
+##                if win(board,1):
+##                  print("you win :)")
+##                  game_over = True
+##                
+##                
+##          else:
+##              selection = int(input("player 2 make your selection between 0 and 7"))
+##              print(selection)
+##              if validation(board,selection):
+##                row = next_open_row(board,selection)
+##                piece(board,row,selection,2)
+##
+##          
+##                if win(board,2):
+##                  print("you win :)")
+##                  game_over = True
+##                  
+##
+##          print_board(board)    
+##          turn +=1
+##          turn = turn % 2 # alternates between 1 and 0 which changes the turns between players
 
